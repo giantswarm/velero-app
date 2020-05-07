@@ -2,6 +2,9 @@ apiVersion: v2
 name: velero-app
 description: A Helm chart for Kubernetes
 
+home: https://github.com/giantswarm/velero-app
+icon: https://github.com/giantswarm/efk-stack-app/raw/master/images/velero.svg
+
 # A chart can be either an 'application' or a 'library' chart.
 #
 # Application charts are a collection of templates that can be packaged into versioned archives
@@ -18,4 +21,4 @@ version: 0.1.0
 
 # This is the version number of the application being deployed. This version number should be
 # incremented each time you make changes to the application.
-appVersion: 1.16.0
+appVersion: [[ .Version ]]

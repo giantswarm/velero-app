@@ -2,7 +2,7 @@
 {{/*
 Expand the name of the chart.
 */}}
-{{- define "velero-app.name" -}}
+{{- define "velero.name" -}}
 {{- default .Chart.Name .Values.nameOverride | trunc 63 | trimSuffix "-" -}}
 {{- end -}}
 
@@ -11,7 +11,7 @@ Create a default fully qualified app name.
 We truncate at 63 chars because some Kubernetes name fields are limited to this (by the DNS naming spec).
 If release name contains chart name it will be used as a full name.
 */}}
-{{- define "velero-app.fullname" -}}
+{{- define "velero.fullname" -}}
 {{- if .Values.fullnameOverride -}}
 {{- .Values.fullnameOverride | trunc 63 | trimSuffix "-" -}}
 {{- else -}}
@@ -27,37 +27,86 @@ If release name contains chart name it will be used as a full name.
 {{/*
 Create chart name and version as used by the chart label.
 */}}
-{{- define "velero-app.chart" -}}
+{{- define "velero.chart" -}}
 {{- printf "%s-%s" .Chart.Name .Chart.Version | replace "+" "_" | trunc 63 | trimSuffix "-" -}}
 {{- end -}}
 
 {{/*
-Common labels
+Create the name of the service account to use for creating or deleting the velero server
 */}}
-{{- define "velero-app.labels" -}}
-helm.sh/chart: {{ include "velero-app.chart" . }}
-{{ include "velero-app.selectorLabels" . }}
-{{- if .Chart.AppVersion }}
-app.kubernetes.io/version: {{ .Chart.AppVersion | quote }}
-{{- end }}
-app.kubernetes.io/managed-by: {{ .Release.Service }}
-{{- end -}}
-
-{{/*
-Selector labels
-*/}}
-{{- define "velero-app.selectorLabels" -}}
-app.kubernetes.io/name: {{ include "velero-app.name" . }}
-app.kubernetes.io/instance: {{ .Release.Name }}
-{{- end -}}
-
-{{/*
-Create the name of the service account to use
-*/}}
-{{- define "velero-app.serviceAccountName" -}}
-{{- if .Values.serviceAccount.create -}}
-    {{ default (include "velero-app.fullname" .) .Values.serviceAccount.name }}
+{{- define "velero.serverServiceAccount" -}}
+{{- if .Values.serviceAccount.server.create -}}
+    {{ default (printf "%s-%s" (include "velero.fullname" .) "server") .Values.serviceAccount.server.name }}
 {{- else -}}
-    {{ default "default" .Values.serviceAccount.name }}
+    {{ default "default" .Values.serviceAccount.server.name }}
+{{- end -}}
+{{- end -}}
+
+{{/*
+Create the name for the credentials secret.
+*/}}
+{{- define "velero.secretName" -}}
+{{- if .Values.credentials.existingSecret -}}
+  {{- .Values.credentials.existingSecret -}}
+{{- else -}}
+  {{- include "velero.fullname" . -}}
+{{- end -}}
+{{- end -}}
+
+{{/*
+Create the Velero priority class name.
+*/}}
+{{- define "velero.priorityClassName" -}}
+{{- if .Values.priorityClassName -}}
+  {{- .Values.priorityClassName -}}
+{{- else -}}
+  {{- include "velero.fullname" . -}}
+{{- end -}}
+{{- end -}}
+
+{{/*
+Create the Restic priority class name.
+*/}}
+{{- define "velero.restic.priorityClassName" -}}
+{{- if .Values.restic.priorityClassName -}}
+  {{- .Values.restic.priorityClassName -}}
+{{- else -}}
+  {{- include "velero.fullname" . -}}
+{{- end -}}
+{{- end -}}
+
+{{/*
+Create the backup storage location name
+*/}}
+{{- define "velero.backupStorageLocation.name" -}}
+{{- with .Values.configuration.backupStorageLocation -}}
+{{ default "default" .name }}
+{{- end -}}
+{{- end -}}
+
+{{/*
+Create the backup storage location provider
+*/}}
+{{- define "velero.backupStorageLocation.provider" -}}
+{{- with .Values.configuration -}}
+{{ default .provider .backupStorageLocation.provider }}
+{{- end -}}
+{{- end -}}
+
+{{/*
+Create the volume snapshot location name
+*/}}
+{{- define "velero.volumeSnapshotLocation.name" -}}
+{{- with .Values.configuration.volumeSnapshotLocation -}}
+{{ default "default" .name }}
+{{- end -}}
+{{- end -}}
+
+{{/*
+Create the volume snapshot location provider
+*/}}
+{{- define "velero.volumeSnapshotLocation.provider" -}}
+{{- with .Values.configuration -}}
+{{ default .provider .volumeSnapshotLocation.provider }}
 {{- end -}}
 {{- end -}}

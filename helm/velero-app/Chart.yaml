@@ -5,6 +5,21 @@ description: A Helm chart for Kubernetes
 home: https://github.com/giantswarm/velero-app
 icon: https://github.com/giantswarm/velero-app/raw/master/images/velero.svg
 
+sources:
+- https://github.com/vmware-tanzu/velero
+
+maintainers:
+  - name: domcar
+    email: d-caruso@hotmail.it
+  - name: hectorj2f
+    email: hfernandez@mesosphere.com
+  - name: nrb
+    email: brubakern@vmware.com
+  - name: carlisia
+    email: carlisiac@vmware.com
+  - name: ashish-amarnath
+    email: ashisham@vmware.com
+
 # A chart can be either an 'application' or a 'library' chart.
 #
 # Application charts are a collection of templates that can be packaged into versioned archives
@@ -21,4 +36,4 @@ version: [[ .Version ]]
 
 # This is the version number of the application being deployed. This version number should be
 # incremented each time you make changes to the application.
-appVersion: 1.16.0
+appVersion: 1.3.1

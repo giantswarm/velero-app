@@ -1,6 +1,6 @@
-[![CircleCI](https://circleci.com/gh/giantswarm/velero-app-app.svg?style=shield)](https://circleci.com/gh/giantswarm/velero-app-app)
+[![CircleCI](https://circleci.com/gh/giantswarm/velero-app.svg?style=shield)](https://circleci.com/gh/giantswarm/velero-app-app)
 
-# velero-app-app chart
+# velero-app chart
 
 Giant Swarm offers a velero-app Managed App which can be installed in tenant clusters.
 Here we define the velero-app chart with its templates and default configuration.

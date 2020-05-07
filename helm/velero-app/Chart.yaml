@@ -3,7 +3,7 @@ name: velero-app
 description: A Helm chart for Kubernetes
 
 home: https://github.com/giantswarm/velero-app
-icon: https://github.com/giantswarm/efk-stack-app/raw/master/images/velero.svg
+icon: https://github.com/giantswarm/velero-app/raw/master/images/velero.svg
 
 # A chart can be either an 'application' or a 'library' chart.
 #

@@ -11,6 +11,55 @@ Velero relies on [Kubernetes Custom Resources](https://kubernetes.io/docs/concep
 
 The tool contains a command line tool (CLI) to manage the backups. For more information look into the [official docs](https://velero.io/docs/v1.3.2/). 
 
+## Requirements
+
+- You should deploy only 1 release of this chart per Kubernetes cluster as it can run backups for entire cluster.
+- You must create the S3 bucket or Azure Blob upfront. 
+- You must generated Cloud Provider credentials upfront.
+
+## Installation
+
+### AWS
+
+In order to make it work in AWS, we need a basic configuration values passed at installation time. It will be stored as User Configmap in the [Control Plane](https://docs.giantswarm.io/basics/app-platform/)
+
+```yaml
+configuration:
+  provider: aws
+
+  backupStorageLocation:
+    name: aws
+    bucket: velero-gs-test
+    config:
+      region: eu-central-1
+  volumeSnapshotLocation:
+    name: aws
+    config:
+      region: eu-central-1 
+
+initContainers:
+ - name: velero-plugin-for-aws
+   image: "velero/velero-plugin-for-aws:v1.0.0"
+   volumeMounts:
+   - mountPath: "/target"
+     name: plugins
+```
+
+At the same time we need to provide the cloud credentials (IAM secret):
+
+```yaml
+credentials:
+  secretContents:
+    cloud: |
+      [default]
+      aws_access_key_id=MYKEYID
+      aws_secret_access_key=MYKEYCONTENTS
+```
+
+## Compatibility
+
+Tested on Giant Swarm release 11.3.0 on AWS with Kubernetes 1.16.9
+
 ## Credit
 
 * https://github.com/vmware-tanzu/helm-charts/tree/master/charts/velero

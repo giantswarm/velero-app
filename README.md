@@ -15,7 +15,7 @@ The tool contains a command line tool (CLI) to manage the backups. For more info
 
 - You should deploy only 1 release of this chart per Kubernetes cluster as it can run backups for entire cluster.
 - You must create the S3 bucket or Azure Blob upfront. 
-- You must generated Cloud Provider credentials upfront.
+- You must create the Cloud Provider credentials upfront.
 
 ## Installation
 

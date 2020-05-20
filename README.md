@@ -43,9 +43,9 @@ initContainers:
    volumeMounts:
    - mountPath: "/target"
      name: plugins
-     credentials:
-       secretContents:
-         cloud: ""
+credentials:
+  secretContents:
+    cloud: ""
 ```
 
 At the same time we need to provide the cloud credentials (IAM secret):

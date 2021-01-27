@@ -59,9 +59,55 @@ credentials:
       aws_secret_access_key=MYKEYCONTENTS
 ```
 
+### Azure
+```yaml
+configuration:
+  provider: azure
+
+  backupStorageLocation:
+    name: default
+    provider: azure
+    # Blob container bucket
+    bucket: testing
+    config:
+      resourceGroup: r55p6
+      # Storage Account Name
+      storageAccount: testingveleroapp
+      bucket: testing
+
+initContainers:
+- name: velero-plugin-for-microsoft-azure
+      image: velero/velero-plugin-for-microsoft-azure:v1.1.1
+  imagePullPolicy: IfNotPresent
+  volumeMounts:
+  - mountPath: "/target"
+    name: plugins
+credentials:
+  secretContents:
+    cloud: ""
+```
+
+At the same time we need to provide the cloud credentials:
+
+```yaml
+credentials:
+  secretContents:
+    cloud: |
+      AZURE_SUBSCRIPTION_ID=xxx
+      AZURE_TENANT_ID=xxx
+      AZURE_CLIENT_ID=SERVICE_PRINCIPAL_CLIENT_ID
+      AZURE_CLIENT_SECRET=SERVICE_PRINCIPAL_SECRET
+      AZURE_RESOURCE_GROUP=RG_ID
+      AZURE_CLOUD_NAME=AzurePublicCloud
+```
+
+For more configuration options regarding access and blob storage setup please check [official documentation](https://github.com/vmware-tanzu/velero-plugin-for-microsoft-azure)
+
 ## Compatibility
 
 Tested on Giant Swarm release 11.3.0 on AWS with Kubernetes 1.16.9
+
+Tested on Giant Swarm release 13.1.1 on Azure with Kubernetes 1.18.15 with chart v1.5.3
 
 ## Credit
 

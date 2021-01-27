@@ -107,7 +107,7 @@ For more configuration options regarding access and blob storage setup please ch
 
 Tested on Giant Swarm release 11.3.0 on AWS with Kubernetes 1.16.9
 
-Tested on Giant Swarm release 13.1.1 on Azure with Kubernetes 1.18.15 with chart v1.5.3
+Tested on Giant Swarm release 13.1.1 on Azure with Kubernetes 1.18.15 with chart v1.4.3
 
 ## Credit
 

@@ -2,8 +2,8 @@ apiVersion: v2
 name: velero
 description: A Helm chart for Kubernetes
 
-home: https://github.com/giantswarm/velero-app
-icon: https://github.com/giantswarm/velero-app/raw/master/images/velero.svg
+home: https://github.com/giantswarm/velero
+icon: https://github.com/giantswarm/velero/raw/master/images/velero.svg
 
 sources:
 - https://github.com/vmware-tanzu/velero

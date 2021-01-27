@@ -5,7 +5,8 @@
 # Details of the container image to use in the Velero deployment & daemonset (if
 # enabling restic). Required.
 image:
-  repository: quay.io/giantswarm/velero
+  registry: quay.io
+  repository: giantswarm/velero
   tag: v1.5.3
   pullPolicy: IfNotPresent
 

@@ -1,5 +1,5 @@
 apiVersion: v2
-name: velero-app
+name: velero
 description: A Helm chart for Kubernetes
 
 home: https://github.com/giantswarm/velero-app

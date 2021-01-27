@@ -39,7 +39,7 @@ configuration:
 
 initContainers:
  - name: velero-plugin-for-aws
-   image: "velero/velero-plugin-for-aws:v1.0.0"
+   image: "velero/velero-plugin-for-aws:v1.1.0"
    volumeMounts:
    - mountPath: "/target"
      name: plugins

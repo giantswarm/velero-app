@@ -6,7 +6,7 @@
 # enabling restic). Required.
 image:
   repository: quay.io/giantswarm/velero
-  tag: v1.5.3
+  tag: v1.4.3
   pullPolicy: IfNotPresent
 
 # Annotations to add to the Velero deployment's pod template. Optional.

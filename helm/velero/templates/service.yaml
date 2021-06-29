@@ -15,7 +15,6 @@ spec:
       port: 8085
       targetPort: monitoring
   selector:
-    name: velero
     app.kubernetes.io/name: {{ include "velero.name" . }}
     app.kubernetes.io/instance: {{ .Release.Name }}
 {{- end }}

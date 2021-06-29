@@ -2,3 +2,4 @@ replace-chart-version-with-git: true
 generate-metadata: true
 chart-dir: ./helm/velero
 destination: ./build
+skip-steps: static_check

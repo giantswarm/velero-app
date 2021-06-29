@@ -17,7 +17,13 @@ image:
 podAnnotations: {}
 
 # Resource requests/limits to specify for the Velero deployment. Optional.
-resources: {}
+resources:
+  requests:
+    cpu: 500m
+    memory: 128Mi
+  limits:
+    cpu: 1000m
+    memory: 512Mi
 
 # Init containers to add to the Velero deployment's pod spec. At least one plugin provider image is required.
 initContainers: []
@@ -36,6 +42,9 @@ securityContext: {}
 
 # Tolerations to use for the Velero deployment. Optional.
 tolerations: []
+
+# Affinity to use for the Velero deployment. Optional.
+affinity: {}
 
 # Node selector to use for the Velero deployment. Optional.
 nodeSelector: {}
@@ -75,7 +84,7 @@ installCRDs: true
 ##
 configuration:
   # Cloud provider being used (e.g. aws, azure, gcp).
-  provider:
+  provider: aws
 
   # Parameters for the `default` BackupStorageLocation. See
   # https://velero.io/docs/v1.0.0/api-types/backupstoragelocation/
@@ -163,6 +172,10 @@ rbac:
   create: true
   # Whether to create the cluster role binding to give administrator permissions to Velero
   clusterAdministrator: true
+
+# If PodSecurityPolicy has to be created or not.
+psp:
+  enabled: true
 
 # Information about the Kubernetes service account Velero uses.
 serviceAccount:

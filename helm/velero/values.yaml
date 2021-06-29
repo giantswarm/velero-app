@@ -78,7 +78,7 @@ installCRDs: true
 ##
 configuration:
   # Cloud provider being used (e.g. aws, azure, gcp).
-  provider:
+  provider: aws
 
   # Parameters for the `default` BackupStorageLocation. See
   # https://velero.io/docs/v1.0.0/api-types/backupstoragelocation/

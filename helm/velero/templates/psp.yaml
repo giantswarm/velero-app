@@ -48,15 +48,16 @@ metadata:
 spec:
   allowPrivilegeEscalation: false
   fsGroup:
-    rule: RunAsAny
+    rule: MustRunAsNonRoot
   runAsUser:
-    rule: RunAsAny
+    rule: MustRunAsNonRoot
   seLinux:
-    rule: RunAsAny
+    rule: MustRunAsNonRoot
   supplementalGroups:
-    rule: RunAsAny
+    rule: MustRunAsNonRoot
   volumes:
   - emptyDir
   - secret
   - configMap
+  readOnlyRootFilesystem: true
 {{- end }}

@@ -3,7 +3,7 @@ name: velero
 description: A Helm chart for Kubernetes
 
 home: https://github.com/giantswarm/velero-app
-icon: https://github.com/giantswarm/velero-apps /raw/master/images/velero.svg
+icon: https://s.giantswarm.io/app-icons/velero/1/light.svg
 
 sources:
 - https://github.com/vmware-tanzu/velero

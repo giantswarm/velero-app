@@ -4,10 +4,7 @@ kind: Schedule
 metadata:
   name: {{ include "velero.fullname" $ }}-{{ $scheduleName }}
   labels:
-    app.kubernetes.io/name: {{ include "velero.name" $ }}
-    app.kubernetes.io/instance: {{ $.Release.Name }}
-    app.kubernetes.io/managed-by: {{ $.Release.Service }}
-    helm.sh/chart: {{ include "velero.chart" $ }}
+    {{- include "labels.common" . | nindent 4 }}
 spec:
   schedule: {{ $schedule.schedule | quote }}
 {{- with $schedule.template }}

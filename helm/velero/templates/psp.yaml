@@ -4,10 +4,7 @@ kind: ClusterRole
 metadata:
   name: {{ include "velero.name" . }}-psp
   labels:
-    app.kubernetes.io/name: {{ include "velero.name" . }}
-    app.kubernetes.io/instance: {{ .Release.Name }}
-    app.kubernetes.io/managed-by: {{ .Release.Service }}
-    helm.sh/chart: {{ include "velero.chart" . }}
+    {{- include "labels.common" . | nindent 4 }}
 rules:
 - apiGroups:
   - policy
@@ -41,10 +38,7 @@ kind: PodSecurityPolicy
 metadata:
   name: {{ include "velero.name" . }}-psp
   labels:
-    app.kubernetes.io/name: {{ include "velero.name" . }}
-    app.kubernetes.io/instance: {{ .Release.Name }}
-    app.kubernetes.io/managed-by: {{ .Release.Service }}
-    helm.sh/chart: {{ include "velero.chart" . }}
+    {{- include "labels.common" . | nindent 4 }}
 spec:
   allowPrivilegeEscalation: false
   fsGroup:

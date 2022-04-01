@@ -5,24 +5,16 @@ kind: Deployment
 metadata:
   name: {{ include "velero.fullname" . }}
   labels:
-    app.kubernetes.io/name: {{ include "velero.name" . }}
-    app.kubernetes.io/instance: {{ .Release.Name }}
-    app.kubernetes.io/managed-by: {{ .Release.Service }}
-    helm.sh/chart: {{ include "velero.chart" . }}
+    {{- include "labels.common" . | nindent 4 }}
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app.kubernetes.io/instance: {{ .Release.Name }}
-      app.kubernetes.io/name: {{ include "velero.name" . }}
+      {{- include "labels.selector" . | nindent 6 }}
   template:
     metadata:
       labels:
-        name: velero
-        app.kubernetes.io/name: {{ include "velero.name" . }}
-        app.kubernetes.io/instance: {{ .Release.Name }}
-        app.kubernetes.io/managed-by: {{ .Release.Service }}
-        helm.sh/chart: {{ include "velero.chart" . }}
+        {{- include "labels.common" . | nindent 8 }}
     {{- if or .Values.podAnnotations .Values.metrics.enabled }}
       annotations:
       {{- with .Values.podAnnotations }}

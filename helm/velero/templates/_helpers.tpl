@@ -116,7 +116,6 @@ Common labels
 */}}
 {{- define "labels.common" -}}
 {{ include "labels.selector" . }}
-app.kubernetes.io/managed-by: {{ .Release.Service }}
 helm.sh/chart: {{ include "velero.chart" . }}
 app.kubernetes.io/managed-by: {{ .Release.Service | quote }}
 app.kubernetes.io/version: {{ .Chart.AppVersion | quote }}

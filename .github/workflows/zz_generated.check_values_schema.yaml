@@ -57,6 +57,7 @@ jobs:
           # Install yq
           go install github.com/mikefarah/yq/v4@v4.24.5
 
+          set -e
           set -x
 
           # Copy current values.yaml and values.schema.json
@@ -64,7 +65,8 @@ jobs:
 
           # Restore base values.yaml and values.schema.json
           git fetch origin "${GITHUB_BASE_REF}"
-          base_commit=$(git merge-base "remotes/origin/${GITHUB_BASE_REF}" ${GITHUB_SHA})
+          git fetch origin "${GITHUB_HEAD_REF}"
+          base_commit=$(git merge-base "remotes/origin/${GITHUB_BASE_REF}" ${GITHUB_HEAD_REF})
           git checkout "${base_commit}" -- "${{ steps.files.outputs.values_path }}"
 
           # Use yq to check if only comments or order in values.yaml has changed

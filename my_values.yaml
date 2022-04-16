@@ -1,4 +1,3 @@
-# dummy change
 ##
 ## Configuration settings that directly affect the Velero deployment YAML.
 ##
@@ -20,7 +19,6 @@ podAnnotations: {}
 # Resource requests/limits to specify for the Velero deployment. Optional.
 resources:
   requests:
-    cpu: 500m
     memory: 128Mi
   limits:
     cpu: 1000m

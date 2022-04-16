@@ -13,30 +13,37 @@ jobs:
       - name: 'Checkout'
         uses: actions/checkout@v3
       - name: 'Check if values.schema.json was updated'
+        id: files
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
           VALUES_FILE_CHANGED="false"
           SCHEMA_FILE_CHANGED="false"
+          echo "##[set-output name=values_changed;]$VALUES_FILE_CHANGED"
+          echo "##[set-output name=schema_changed;]$SCHEMA_FILE_CHANGED"
 
           echo "Comparing ${GITHUB_BASE_REF}...${GITHUB_HEAD_REF}"
 
           changed_files=$(gh api "repos/{owner}/{repo}/compare/${GITHUB_BASE_REF}...${GITHUB_HEAD_REF}" --jq ".files[] | .filename")
+          files_in_tree=$(git ls-tree -r --name-only ${GITHUB_SHA})
+          echo "##[set-output name=values_path;]$(grep 'values\.yaml' <<< \"${files_in_tree}\")"
+          echo "##[set-output name=schema_path;]$(grep 'values\.schema\.json' <<< \"${files_in_tree}\")"
 
-          if grep -q "values.schema.json" <<< $(git ls-tree -r --name-only ${GITHUB_SHA}); then
+          if grep -q "values.schema.json" <<< "${files_in_tree}"; then
 
             if grep -q "values.yaml" <<< "${changed_files}" ; then
               VALUES_FILE_CHANGED="true"
+              echo "##[set-output name=values_changed;]$VALUES_FILE_CHANGED"
             fi
 
             if grep -q "values.schema.json" <<< "${changed_files}" ; then
               SCHEMA_FILE_CHANGED="true"
+              echo "##[set-output name=schema_changed;]$SCHEMA_FILE_CHANGED"
             fi
 
             if [ $VALUES_FILE_CHANGED != $SCHEMA_FILE_CHANGED ]; then
               echo "FAILED: values.yaml was updated but values.schema.json hasn't been regenerated"
               echo "Please refer to this document: https://intranet.giantswarm.io/docs/organizational-structure/teams/cabbage/app-updates/helm-values-schema/"
-              exit 1
             fi
 
             echo "PASSED: values.yaml and values.schema.json both appear to have been updated"
@@ -44,3 +51,25 @@ jobs:
           fi
 
           echo "INFO: values.schema.json not present in this repo - nothing to do"
+      - name: 'Validate current Check if values.schema.json update required'
+        if: steps.files.outputs.values_changed != 'false' && steps.files.outputs.schema_changed != 'false'
+        run: |
+          # Install yq
+          #go install github.com/mikefarah/yq/v4@v4.24.5
+
+          # Copy current values.yaml and values.schema.json
+          cp "${{ steps.files.outputs.values_path }}" current_values.yaml
+          cp "${{ steps.files.outputs.schema_path }}" current_values.schema.json
+
+          # Restore base values.yaml and values.schema.json
+          git checkout "${GITHUB_BASE_REF}" -- "${{ steps.files.outputs.values_path }}" "${{ steps.files.outputs.values_path }}"
+
+          # Use yq to check if only comments or order in values.yaml has changed
+          # This is okay
+          diff <(yq -P 'sort_keys(..) | ... comments=""' current_values.yaml) <(yq -P 'sort_keys(..) | ... comments=""' "${{ steps.files.outputs.values_path }}")
+
+          # Install ajv-cli
+          npm install -g ajv-cli
+
+          # Try to validate the current_values.yaml against the current schema
+          ajv test --strict=true --strict-required=true --strict-types=true --strict-schema=true --remove-additional=all -s current_values.schema.json -d current_values.yaml --valid

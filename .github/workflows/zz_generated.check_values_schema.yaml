@@ -55,14 +55,15 @@ jobs:
         if: steps.files.outputs.values_changed != 'false' && steps.files.outputs.schema_changed != 'false'
         run: |
           # Install yq
-          #go install github.com/mikefarah/yq/v4@v4.24.5
+          go install github.com/mikefarah/yq/v4@v4.24.5
 
           # Copy current values.yaml and values.schema.json
           cp "${{ steps.files.outputs.values_path }}" current_values.yaml
           cp "${{ steps.files.outputs.schema_path }}" current_values.schema.json
 
           # Restore base values.yaml and values.schema.json
-          git checkout "${GITHUB_BASE_REF}" -- "${{ steps.files.outputs.values_path }}" "${{ steps.files.outputs.values_path }}"
+          base_commit=$(git merge-base "remotes/origin/${GITHUB_BASE_REF}" ${GITHUB_HEAD_REF})
+          git checkout "${base_commit}" -- "${{ steps.files.outputs.values_path }}" "${{ steps.files.outputs.values_path }}"
 
           # Use yq to check if only comments or order in values.yaml has changed
           # This is okay

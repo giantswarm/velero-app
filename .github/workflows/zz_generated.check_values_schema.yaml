@@ -54,9 +54,6 @@ jobs:
       - name: 'Validate current Check if values.schema.json update required'
         if: steps.files.outputs.values_changed != 'false' && steps.files.outputs.schema_changed != 'false'
         run: |
-          # Install yq
-          go install github.com/mikefarah/yq/v4@v4.24.5
-
           set -e
           set -x
 
@@ -69,12 +66,15 @@ jobs:
           base_commit=$(git merge-base "remotes/origin/${GITHUB_BASE_REF}" "remotes/origin/${GITHUB_HEAD_REF}")
           git checkout "${base_commit}" -- "${{ steps.files.outputs.values_path }}"
 
-          # Use yq to check if only comments or order in values.yaml has changed
-          # This is okay
-          diff <(yq -P 'sort_keys(..) | ... comments=""' current_values.yaml) <(yq -P 'sort_keys(..) | ... comments=""' "${{ steps.files.outputs.values_path }}")
-
           # Install ajv-cli
           npm install -g ajv-cli
 
           # Try to validate the current_values.yaml against the current schema
           ajv test --strict=true --strict-required=true --strict-types=true --strict-schema=true --remove-additional=all -s "${{ steps.files.outputs.schema_path }}" -d "${{ steps.files.outputs.values_path }}" --valid
+
+          # Install yq
+          go install github.com/mikefarah/yq/v4@v4.24.5
+
+          # Use yq to check if only comments or order in values.yaml has changed
+          # This is okay
+          diff <(yq -P 'sort_keys(..) | ... comments=""' current_values.yaml) <(yq -P 'sort_keys(..) | ... comments=""' "${{ steps.files.outputs.values_path }}")

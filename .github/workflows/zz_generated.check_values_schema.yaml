@@ -57,6 +57,12 @@ jobs:
           set -e
           set -x
 
+          # Install ajv-cli
+          npm install -g ajv-cli
+
+          # Try to validate the current_values.yaml against the current schema
+          ajv test --strict=true --strict-required=true --strict-types=true --strict-schema=true --remove-additional=all -s "${{ steps.files.outputs.schema_path }}" -d "${{ steps.files.outputs.values_path }}" --valid
+
           # Copy current values.yaml and values.schema.json
           cp "${{ steps.files.outputs.values_path }}" current_values.yaml
 
@@ -65,12 +71,6 @@ jobs:
           git fetch origin "${GITHUB_HEAD_REF}"
           base_commit=$(git merge-base "remotes/origin/${GITHUB_BASE_REF}" "remotes/origin/${GITHUB_HEAD_REF}")
           git checkout "${base_commit}" -- "${{ steps.files.outputs.values_path }}"
-
-          # Install ajv-cli
-          npm install -g ajv-cli
-
-          # Try to validate the current_values.yaml against the current schema
-          ajv test --strict=true --strict-required=true --strict-types=true --strict-schema=true --remove-additional=all -s "${{ steps.files.outputs.schema_path }}" -d "${{ steps.files.outputs.values_path }}" --valid
 
           # Install yq
           go install github.com/mikefarah/yq/v4@v4.24.5

@@ -59,11 +59,11 @@ jobs:
 
           # Copy current values.yaml and values.schema.json
           cp "${{ steps.files.outputs.values_path }}" current_values.yaml
-          cp "${{ steps.files.outputs.schema_path }}" current_values.schema.json
 
           # Restore base values.yaml and values.schema.json
+          git fetch origin "${GITHUB_BASE_REF}"
           base_commit=$(git merge-base "remotes/origin/${GITHUB_BASE_REF}" ${GITHUB_HEAD_REF})
-          git checkout "${base_commit}" -- "${{ steps.files.outputs.values_path }}" "${{ steps.files.outputs.values_path }}"
+          git checkout "${base_commit}" -- "${{ steps.files.outputs.values_path }}"
 
           # Use yq to check if only comments or order in values.yaml has changed
           # This is okay
@@ -73,4 +73,4 @@ jobs:
           npm install -g ajv-cli
 
           # Try to validate the current_values.yaml against the current schema
-          ajv test --strict=true --strict-required=true --strict-types=true --strict-schema=true --remove-additional=all -s current_values.schema.json -d current_values.yaml --valid
+          ajv test --strict=true --strict-required=true --strict-types=true --strict-schema=true --remove-additional=all -s "${{ steps.files.outputs.schema_path }}" -d "${{ steps.files.outputs.values_path }}" --valid

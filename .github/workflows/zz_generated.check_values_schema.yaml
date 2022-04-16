@@ -62,7 +62,7 @@ jobs:
 
           # Restore base values.yaml and values.schema.json
           git fetch origin "${GITHUB_BASE_REF}"
-          base_commit=$(git merge-base "remotes/origin/${GITHUB_BASE_REF}" ${GITHUB_HEAD_REF})
+          base_commit=$(git merge-base "remotes/origin/${GITHUB_BASE_REF}" ${GITHUB_SHA})
           git checkout "${base_commit}" -- "${{ steps.files.outputs.values_path }}"
 
           # Use yq to check if only comments or order in values.yaml has changed

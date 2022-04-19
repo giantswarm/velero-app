@@ -57,24 +57,67 @@ jobs:
           set -e
           set -x
 
-          # Install ajv-cli
-          npm install -g ajv-cli
-
-          # Try to validate the current_values.yaml against the current schema
-          ajv test --strict=true --strict-required=true --strict-types=true --strict-schema=true --remove-additional=all -s "${{ steps.files.outputs.schema_path }}" -d "${{ steps.files.outputs.values_path }}" --valid
-
-          # Copy current values.yaml and values.schema.json
+          ## Copy current values.yaml
           cp "${{ steps.files.outputs.values_path }}" current_values.yaml
 
-          # Restore base values.yaml and values.schema.json
+          ## Restore base values.yaml and values.schema.json
           git fetch origin "${GITHUB_BASE_REF}"
           git fetch origin "${GITHUB_HEAD_REF}"
           base_commit=$(git merge-base "remotes/origin/${GITHUB_BASE_REF}" "remotes/origin/${GITHUB_HEAD_REF}")
           git checkout "${base_commit}" -- "${{ steps.files.outputs.values_path }}"
 
-          # Install yq
-          go install github.com/mikefarah/yq/v4@v4.24.5
+          pip3 install pyyaml==6.0 deepdiff==5.8.0
 
-          # Use yq to check if only comments or order in values.yaml has changed
-          # This is okay
-          diff <(yq -P 'sort_keys(..) | ... comments=""' current_values.yaml) <(yq -P 'sort_keys(..) | ... comments=""' "${{ steps.files.outputs.values_path }}")
+          python3 <<HEREDOC
+          import yaml
+          import sys
+          from deepdiff import DeepDiff
+          from collections.abc import Mapping
+
+          def equalize_values(obj):
+              if isinstance(obj, str):
+                  return ""
+              if isinstance(obj, int) or isinstance(obj, float) or isinstance(obj, complex):
+                  return 1
+              if isinstance(obj, bool):
+                  return True
+              if isinstance(obj, list):
+                  return [equalize_values(val) for val in obj]
+              if isinstance(obj, Mapping):
+                  return {key: equalize_values(val) for key, val in obj.items()}
+              return obj
+
+          original_values=dict()
+          current_values=dict()
+
+          with open("${{ steps.files.outputs.values_path }}", "r") as stream:
+              original_values = yaml.safe_load(stream)
+          with open("current_values.yaml", "r") as stream:
+              current_values = yaml.safe_load(stream)
+
+          original_values = equalize_values(original_values)
+          current_values = equalize_values(current_values)
+
+          ddiff = DeepDiff(original_values, current_values, ignore_order=True)
+          if ddiff != {}:
+              print(ddiff)
+              sys.exit(1)
+          HEREDOC
+
+
+          ## Install ajv-cli
+          #npm install -g ajv-cli
+
+          ## Try to validate the current_values.yaml against the current schema
+          #ajv test --strict=true --strict-required=true --strict-types=true --strict-schema=true --remove-additional=all -s "${{ steps.files.outputs.schema_path }}" -d "${{ steps.files.outputs.values_path }}" --valid
+
+          ## Copy current values.yaml and values.schema.json
+          #cp "${{ steps.files.outputs.values_path }}" current_values.yaml
+
+
+          ## Install yq
+          #go install github.com/mikefarah/yq/v4@v4.24.5
+
+          ## Use yq to check if only comments or order in values.yaml has changed
+          ## This is okay
+          #diff <(yq -P 'sort_keys(..) | ... comments=""' current_values.yaml) <(yq -P 'sort_keys(..) | ... comments=""' "${{ steps.files.outputs.values_path }}")

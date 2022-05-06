@@ -110,3 +110,23 @@ Create the volume snapshot location provider
 {{ default .provider .volumeSnapshotLocation.provider }}
 {{- end -}}
 {{- end -}}
+
+{{/*
+Common labels
+*/}}
+{{- define "labels.common" -}}
+{{ include "labels.selector" . }}
+helm.sh/chart: {{ include "velero.chart" . }}
+app.kubernetes.io/managed-by: {{ .Release.Service | quote }}
+app.kubernetes.io/version: {{ .Chart.AppVersion | quote }}
+name: velero
+application.giantswarm.io/team: {{ index .Chart.Annotations "application.giantswarm.io/team" | quote }}
+{{- end -}}
+
+{{/*
+Selector labels
+*/}}
+{{- define "labels.selector" -}}
+app.kubernetes.io/instance: {{ .Release.Name }}
+app.kubernetes.io/name: {{ include "velero.name" . }}
+{{- end -}}

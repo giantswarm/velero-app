@@ -91,14 +91,14 @@ configuration:
   backupStorageLocation:
     # Cloud provider where backups should be stored. Usually should
     # match `configuration.provider`. Required.
-    name:
+    name: ""
     # Provider for the backup storage location. If omitted
     # `configuration.provider` will be used instead.
-    provider:
+    provider: ""
     # Bucket to store backups in. Required.
-    bucket:
+    bucket: ""
     # Prefix within bucket under which to store backups. Optional.
-    prefix:
+    prefix: ""
     # Additional provider-specific configuration. See link above
     # for details of required/optional fields for your provider.
     config: {}
@@ -120,10 +120,10 @@ configuration:
   volumeSnapshotLocation:
     # Cloud provider where volume snapshots are being taken. Usually
     # should match `configuration.provider`. Required.,
-    name:
+    name: ""
     # Provider for the backup storage location. If omitted
     # `configuration.provider` will be used instead.
-    provider:
+    provider: ""
     # Additional provider-specific configuration. See link above
     # for details of required/optional fields for your provider.
     config: {}
@@ -141,22 +141,22 @@ configuration:
   # comments below.
   # --------------------
   # `velero server` default: 1m
-  backupSyncPeriod:
+  backupSyncPeriod: 1m
   # `velero server` default: 1h
-  resticTimeout:
+  resticTimeout: 1h
   # `velero server` default: namespaces,persistentvolumes,persistentvolumeclaims,secrets,configmaps,serviceaccounts,limitranges,pods
-  restoreResourcePriorities:
+  restoreResourcePriorities: namespaces,persistentvolumes,persistentvolumeclaims,secrets,configmaps,serviceaccounts,limitranges,pods
   # `velero server` default: false
-  restoreOnlyMode:
+  restoreOnlyMode: false
 
   # additional key/value pairs to be used as environment variables such as "AWS_CLUSTER_NAME: 'yourcluster.domain.tld'"
   extraEnvVars: {}
 
   # Set log-level for Velero pod. Default: info. Other options: debug, warning, error, fatal, panic.
-  logLevel:
+  logLevel: info
 
   # Set log-format for Velero pod. Default: text. Other option: json.
-  logFormat:
+  logFormat: text
 
 ##
 ## End of backup/snapshot location settings.
@@ -181,7 +181,7 @@ psp:
 serviceAccount:
   server:
     create: true
-    name:
+    name: ""
     annotations:
 
 # Info about the secret to be used by the Velero deployment, which
@@ -194,7 +194,7 @@ credentials:
   useSecret: true
   # Name of a pre-existing secret (if any) in the Velero namespace
   # that should be used to get IAM account credentials. Optional.
-  existingSecret:
+  existingSecret: ""
   # Data to be stored in the Velero secret, if `useSecret` is
   # true and `existingSecret` is empty. This should be the contents
   # of your IAM credentials file.

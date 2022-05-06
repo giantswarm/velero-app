@@ -1,5 +1,4 @@
 checks:
-  addAllBuiltIn: true
   exclude:
   - run-as-non-root
   - cluster-admin-role-binding

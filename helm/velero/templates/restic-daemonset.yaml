@@ -5,22 +5,17 @@ kind: DaemonSet
 metadata:
   name: restic
   labels:
-    app.kubernetes.io/name: {{ include "velero.name" . }}
-    app.kubernetes.io/instance: {{ .Release.Name }}
-    app.kubernetes.io/managed-by: {{ .Release.Service }}
-    helm.sh/chart: {{ include "velero.chart" . }}
+    app.kubernetes.io/component: restic
+    {{- include "labels.common" . | nindent 4 }}
 spec:
   selector:
     matchLabels:
-      name: restic
+      app.kubernetes.io/component: restic
   template:
     metadata:
       labels:
-        name: restic
-        app.kubernetes.io/name: {{ include "velero.name" . }}
-        app.kubernetes.io/instance: {{ .Release.Name }}
-        app.kubernetes.io/managed-by: {{ .Release.Service }}
-        helm.sh/chart: {{ include "velero.chart" . }}
+        app.kubernetes.io/component: restic
+        {{- include "labels.common" . | nindent 8 }}
       {{- with .Values.podAnnotations }}
       annotations:
         {{- toYaml . | nindent 8 }}

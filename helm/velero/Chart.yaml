@@ -39,4 +39,4 @@ version: [[ .Version ]]
 appVersion: v1.4.3
 
 annotations:
-  application.giantswarm.io/team: team-cabbage
+  application.giantswarm.io/team: team-turtles

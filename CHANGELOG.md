@@ -8,6 +8,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.2.0] - 2026-03-03
+
 ### Added
 
 - Add team ownership labels.
@@ -26,6 +28,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Create Velero app in Playground Catalog
 
-[Unreleased]: https://github.com/giantswarm/velero-app/compare/v0.1.0...HEAD
+[Unreleased]: https://github.com/giantswarm/velero-app/compare/v0.2.0...HEAD
+[0.2.0]: https://github.com/giantswarm/velero-app/compare/v0.1.0...v0.2.0
 [0.1.0]: https://github.com/giantswarm/velero-app/compare/v0.0.1...v0.1.0
 [0.6.0]: https://github.com/giantswarm/release-operator/releases/tag/v0.0.1

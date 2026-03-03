@@ -15,6 +15,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Changed
 
 - Update icon
+- Chart: Add `io.giantswarm.application.audience: giantswarm` annotation to `Chart.yaml`.
 
 ## [0.1.0] - 2021-06-29
 

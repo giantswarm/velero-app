@@ -40,3 +40,4 @@ appVersion: v1.4.3
 
 annotations:
   application.giantswarm.io/team: team-turtles
+  io.giantswarm.application.audience: giantswarm

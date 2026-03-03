@@ -39,5 +39,5 @@ version: [[ .Version ]]
 appVersion: v1.4.3
 
 annotations:
-  application.giantswarm.io/team: team-turtles
+  application.giantswarm.io/team: tenet
   io.giantswarm.application.audience: giantswarm

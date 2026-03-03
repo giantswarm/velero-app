@@ -16,6 +16,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Update icon
 - Chart: Add `io.giantswarm.application.audience: giantswarm` annotation to `Chart.yaml`.
+- Chart: Update team ownership to `tenet`.
 
 ## [0.1.0] - 2021-06-29
 

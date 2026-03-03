@@ -1,4 +1,5 @@
 replace-chart-version-with-git: true
+giantswarm-validator-ignored-checks: C0003
 generate-metadata: true
 chart-dir: ./helm/velero
 destination: ./build

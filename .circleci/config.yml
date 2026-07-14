@@ -1,18 +1,22 @@
 version: 2.1
+
 orbs:
-  architect: giantswarm/architect@6.14.1
+  architect: giantswarm/architect@9.5.5
 
 workflows:
-  package-and-push-chart-on-tag:
+  build:
     jobs:
       - architect/push-to-app-catalog:
-          executor: "app-build-suite"
-          context: "architect"
-          name: "package and push velero chart"
-          app_catalog: "giantswarm-playground-catalog"
-          app_catalog_test: "giantswarm-playground-test-catalog"
-          chart: "velero"
-          # Trigger job on git tag.
+          name: push-to-giantswarm-playground-catalog
+          context: architect
+          executor: app-build-suite
+          chart: velero
+          app_catalog: giantswarm-playground-catalog
+          app_catalog_test: giantswarm-playground-test-catalog
           filters:
+            branches:
+              ignore:
+                - main
+                - master
             tags:
               only: /^v.*/

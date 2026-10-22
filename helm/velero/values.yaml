@@ -6,7 +6,7 @@
 # enabling restic). Required.
 image:
   repository: gsoci.azurecr.io/giantswarm/velero
-  tag: v1.4.3
+  tag: v1.18.4
   pullPolicy: IfNotPresent
 
 # Annotations to add to the Velero deployment's pod template. Optional.

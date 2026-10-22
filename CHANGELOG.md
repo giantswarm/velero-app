@@ -10,6 +10,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Fixed
 
+- The default Velero image is pulled from `gsoci.azurecr.io/giantswarm/velero` instead of `quay.io/giantswarm/velero`, which no longer pulls since the quay.io org was removed. Installations that set `image.repository` to the quay.io path themselves must update it.
 - The `helm.sh/chart` label is valid for long chart versions: the 63-character cut trims the whole trailing run of `-`, `.` and `_`.
 
 ## [0.2.0] - 2026-03-03
